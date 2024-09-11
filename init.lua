@@ -655,6 +655,14 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'dockerfile-language-server',
+        'elixir-ls',
+        'erlang-ls',
+        'gopls',
+        'nextls',
+        'rust-analyzer',
+        'clangd',
+        'python-lsp-server',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -851,38 +859,6 @@ require('lazy').setup({
   },
 
   'tpope/vim-fugitive',
-
-  {
-    'elixir-tools/elixir-tools.nvim',
-    version = '*',
-    event = { 'BufReadPre', 'BufNewFile' },
-    config = function()
-      local elixir = require 'elixir'
-      local elixirls = require 'elixir.elixirls'
-
-      elixir.setup {
-        nextls = { enable = true },
-        elixirls = {
-          enable = true,
-          settings = elixirls.settings {
-            dialyzerEnabled = false,
-            enableTestLenses = false,
-          },
-          on_attach = function(client, bufnr)
-            vim.keymap.set('n', '<space>fp', ':ElixirFromPipe<cr>', { buffer = true, noremap = true })
-            vim.keymap.set('n', '<space>tp', ':ElixirToPipe<cr>', { buffer = true, noremap = true })
-            vim.keymap.set('v', '<space>em', ':ElixirExpandMacro<cr>', { buffer = true, noremap = true })
-          end,
-        },
-        projectionist = {
-          enable = true,
-        },
-      }
-    end,
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-    },
-  },
 
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
