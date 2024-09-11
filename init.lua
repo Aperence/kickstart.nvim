@@ -325,6 +325,14 @@ require('lazy').setup({
     },
   },
 
+  {
+    'lukas-reineke/indent-blankline.nvim',
+    main = 'ibl',
+    ---@module "ibl"
+    ---@type ibl.config
+    opts = {},
+  },
+
   -- NOTE: Plugins can specify dependencies.
   --
   -- The dependencies are proper plugin specifications as well - anything
@@ -840,6 +848,40 @@ require('lazy').setup({
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
     end,
+  },
+
+  'tpope/vim-fugitive',
+
+  {
+    'elixir-tools/elixir-tools.nvim',
+    version = '*',
+    event = { 'BufReadPre', 'BufNewFile' },
+    config = function()
+      local elixir = require 'elixir'
+      local elixirls = require 'elixir.elixirls'
+
+      elixir.setup {
+        nextls = { enable = true },
+        elixirls = {
+          enable = true,
+          settings = elixirls.settings {
+            dialyzerEnabled = false,
+            enableTestLenses = false,
+          },
+          on_attach = function(client, bufnr)
+            vim.keymap.set('n', '<space>fp', ':ElixirFromPipe<cr>', { buffer = true, noremap = true })
+            vim.keymap.set('n', '<space>tp', ':ElixirToPipe<cr>', { buffer = true, noremap = true })
+            vim.keymap.set('v', '<space>em', ':ElixirExpandMacro<cr>', { buffer = true, noremap = true })
+          end,
+        },
+        projectionist = {
+          enable = true,
+        },
+      }
+    end,
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+    },
   },
 
   -- Highlight todo, notes, etc in comments
